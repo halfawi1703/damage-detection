@@ -64,6 +64,30 @@
         max-height: 170px;
         margin-top: 10px;
     }
+
+    #cameraFeedFront {
+        max-width: 100%;
+        max-height: 170px;
+        /* margin-top: 10px; */
+        margin-bottom: 10px;
+    }
+
+    #capturedImageFront {
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+
+    #cameraFeedRight {
+        max-width: 100%;
+        max-height: 170px;
+        /* margin-top: 10px; */
+        margin-bottom: 10px;
+    }
+
+    #capturedImageRight {
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
 </style>
 <div class="app-content">
     <div class="page-header">
@@ -259,16 +283,16 @@
                         <div class="col-md-6">
                             <div class="card-file">
                                 <div class="card-file-header">
-                                    <p>Unggah Gambar Bagian Depan <span class="required">*</span></p>
+                                    <p>Ambil Foto Bagian Depan <span class="required">*</span></p>
                                 </div>
                                 <div class="card-body">
-                                    <div class="mb-3">
-                                        <img id="preview_front_image" src="" alt="Pratinjau" class="img-fluid rounded">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="front_image" class="form-label">Pilih Gambar</label>
-                                        <input type="file" name="front_image" id="front_image" class="form-control" accept="image/*">
-                                    </div>
+                                    <video id="cameraFeedFront" autoplay style="display: none;"></video>
+                                    <button class="btn btn--primary" id="startButtonFront"> <i class="fa fa-camera"></i></button>
+                                    <button class="btn btn--secondary" id="captureButtonFront" disabled> <i class="fa fa-image"></i></button>
+                                    <button class="btn btn-danger" id="cancelButtonFront" disabled> <i class="fa fa-trash"></i></button>
+                                    <canvas id="capturedCanvasFront" style="display: none;"></canvas>
+                                    <img id="capturedImageFront" style="display: none;">
+                                    <input type="hidden" name="front_image" id="front_image" value="">
                                 </div>
                             </div>
                         </div>
@@ -289,13 +313,13 @@
                                     <p>Unggah Gambar Bagian Kanan <span class="required">*</span></p>
                                 </div>
                                 <div class="card-body">
-                                    <div class="mb-3">
-                                        <img id="preview_right_image" src="" alt="Pratinjau" class="img-fluid rounded">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="right_image" class="form-label">Pilih Gambar</label>
-                                        <input type="file" name="right_image" id="right_image" class="form-control" accept="image/*">
-                                    </div>
+                                    <video id="cameraFeedRight" autoplay style="display: none;"></video>
+                                    <button class="btn btn--primary" id="startButtonRight"> <i class="fa fa-camera"></i></button>
+                                    <button class="btn btn--secondary" id="captureButtonRight" disabled> <i class="fa fa-image"></i></button>
+                                    <button class="btn btn-danger" id="cancelButtonRight" disabled> <i class="fa fa-trash"></i></button>
+                                    <canvas id="capturedCanvasRight" style="display: none;"></canvas>
+                                    <img id="capturedImageRight" style="display: none;">
+                                    <input type="hidden" name="right_image" id="right_image" value="">
                                 </div>
                             </div>
                         </div>
@@ -380,6 +404,113 @@
 <script src="<?php echo base_url('assets/js/select2.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/jquery.dataTables.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/dataTables.bootstrap4.min.js'); ?>"></script>
+<script>
+    // take picture in front
+    const cameraFeedFront = document.getElementById('cameraFeedFront');
+    const startButtonFront = document.getElementById('startButtonFront');
+    const captureButtonFront = document.getElementById('captureButtonFront');
+    const cancelButtonFront = document.getElementById('cancelButtonFront');
+    const capturedCanvasFront = document.getElementById('capturedCanvasFront');
+    const capturedImageFront = document.getElementById('capturedImageFront');
+
+    let streamFront = null;
+
+    startButtonFront.addEventListener('click', async () => {
+        try {
+            streamFront = await navigator.mediaDevices.getUserMedia({
+                video: true
+            });
+            cameraFeedFront.srcObject = streamFront;
+            cameraFeedFront.style.display = 'block';
+            startButtonFront.disabled = true;
+            captureButtonFront.disabled = false;
+            cancelButtonFront.disabled = false;
+        } catch (error) {
+            console.error('Gagal mengakses kamera:', error);
+        }
+    });
+
+    captureButtonFront.addEventListener('click', () => {
+        capturedCanvasFront.width = cameraFeedFront.videoWidth;
+        capturedCanvasFront.height = cameraFeedFront.videoHeight;
+        const context = capturedCanvasFront.getContext('2d');
+        context.drawImage(cameraFeedFront, 0, 0, capturedCanvasFront.width, capturedCanvasFront.height);
+        capturedImageFront.src = capturedCanvasFront.toDataURL('image/png');
+        capturedImageFront.style.display = 'block';
+        capturedCanvasFront.style.display = 'none';
+        cameraFeedFront.style.display = 'none';
+        captureButtonFront.disabled = true;
+        cancelButtonFront.disabled = true;
+        startButtonFront.disabled = false;
+    });
+
+    cancelButtonFront.addEventListener('click', () => {
+        if (streamFront) {
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+            cameraFeedFront.style.display = 'none';
+            capturedCanvasFront.style.display = 'none';
+            capturedImageFront.style.display = 'none';
+            startButtonFront.disabled = false;
+            captureButtonFront.disabled = true;
+            cancelButtonFront.disabled = true;
+        }
+    });
+
+    // take picture from right
+    const cameraFeedRight = document.getElementById('cameraFeedRight');
+    const startButtonRight = document.getElementById('startButtonRight');
+    const captureButtonRight = document.getElementById('captureButtonRight');
+    const cancelButtonRight = document.getElementById('cancelButtonRight');
+    const capturedCanvasRight = document.getElementById('capturedCanvasRight');
+    const capturedImageRight = document.getElementById('capturedImageRight');
+
+    let streamRight = null;
+
+    startButtonRight.addEventListener('click', async () => {
+        try {
+            streamRight = await navigator.mediaDevices.getUserMedia({
+                video: true
+            });
+            cameraFeedRight.srcObject = streamRight;
+            cameraFeedRight.style.display = 'block';
+            startButtonRight.disabled = true;
+            captureButtonRight.disabled = false;
+            cancelButtonRight.disabled = false;
+        } catch (error) {
+            console.error('Gagal mengakses kamera:', error);
+        }
+    });
+
+    captureButtonRight.addEventListener('click', () => {
+        capturedCanvasRight.width = cameraFeedRight.videoWidth;
+        capturedCanvasRight.height = cameraFeedRight.videoHeight;
+        const context = capturedCanvasRight.getContext('2d');
+        context.drawImage(cameraFeedRight, 0, 0, capturedCanvasRight.width, capturedCanvasRight.height);
+        capturedImageRight.src = capturedCanvasRight.toDataURL('image/png');
+        capturedImageRight.style.display = 'block';
+        capturedCanvasRight.style.display = 'none';
+        cameraFeedRight.style.display = 'none';
+        captureButtonRight.disabled = true;
+        cancelButtonRight.disabled = true;
+        startButtonRight.disabled = false;
+    });
+
+    cancelButtonRight.addEventListener('click', () => {
+        if (streamRight) {
+            const tracks = streamRight.getTracks();
+            tracks.forEach(track => track.stop());
+            cameraFeedRight.style.display = 'none';
+            capturedCanvasRight.style.display = 'none';
+            capturedImageRight.style.display = 'none';
+            startButtonRight.disabled = false;
+            captureButtonRight.disabled = true;
+            cancelButtonRight.disabled = true;
+        }
+    });
+    // take picture from left
+    // take picture from behind
+</script>
 <script>
     let tabSelected = '<?php echo @$tab_selected ?: ''; ?>';
     let menuActive = '<?php echo @$menu_active ?: ''; ?>';
@@ -840,34 +971,4 @@
             return false;
         return true;
     }
-
-    const frontImage = document.getElementById('front_image');
-    const previewFrontImage = document.getElementById('preview_front_image');
-
-    frontImage.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewFrontImage.src = e.target.result;
-                previewFrontImage.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    const rightImage = document.getElementById('right_image');
-    const previewRightImage = document.getElementById('preview_right_image');
-
-    rightImage.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewRightImage.src = e.target.result;
-                previewRightImage.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
-    });
 </script>
