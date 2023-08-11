@@ -299,7 +299,7 @@
             <a class="nav-toggle waves-effect" role="button" aria-expanded="false"></a>
             <a href="<?php echo base_url('overview'); ?>">
                 <div class="logo">
-                    <img class="lazyimg" data-src="<?php echo base_url('assets/logo.gif'); ?>" alt="logo" title="Logo" width="148" height="36">
+                    <img class="lazyimg" data-src="<?php echo base_url('assets/logo-v1.gif'); ?>" alt="logo" title="Logo" width="148" height="36">
                 </div>
             </a>
         </div>
@@ -321,10 +321,10 @@
                     <div class="menu-item__label">Overview</div>
                 </a>
             </li>
-            <li class="<?php echo @$menu_active == 'request' ? 'menu active' : 'menu'; ?>">
-                <a href="<?php echo base_url('request'); ?>" class="menu-item waves-effect">
+            <li class="<?php echo @$menu_active == 'report' ? 'menu active' : 'menu'; ?>">
+                <a href="<?php echo base_url('report'); ?>" class="menu-item waves-effect">
                     <i class="menu-item__icon far fa-id-card"></i>
-                    <div class="menu-item__label">Request</div>
+                    <div class="menu-item__label">Report</div>
                 </a>
             </li>
             <li class="<?php echo in_array(@$menu_active, ['user', 'file']) ? 'menu has-sub open' : 'menu has-sub'; ?>">
