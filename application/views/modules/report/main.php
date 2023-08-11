@@ -287,7 +287,7 @@
                                 </div>
                                 <div class="card-body">
                                     <video id="cameraFeedFront" autoplay style="display: none;"></video>
-                                    <button class="btn btn--primary" id="startButtonFront"> <i class="fa fa-camera"></i></button>
+                                    <a class="btn btn--primary" id="startButtonFront"> <i class="fa fa-camera"></i></a>
                                     <button class="btn btn--secondary" id="captureButtonFront" disabled> <i class="fa fa-image"></i></button>
                                     <button class="btn btn-danger" id="cancelButtonFront" disabled> <i class="fa fa-trash"></i></button>
                                     <canvas id="capturedCanvasFront" style="display: none;"></canvas>
@@ -314,7 +314,7 @@
                                 </div>
                                 <div class="card-body">
                                     <video id="cameraFeedRight" autoplay style="display: none;"></video>
-                                    <button class="btn btn--primary" id="startButtonRight"> <i class="fa fa-camera"></i></button>
+                                    <a class="btn btn--primary" id="startButtonRight"> <i class="fa fa-camera"></i></a>
                                     <button class="btn btn--secondary" id="captureButtonRight" disabled> <i class="fa fa-image"></i></button>
                                     <button class="btn btn-danger" id="cancelButtonRight" disabled> <i class="fa fa-trash"></i></button>
                                     <canvas id="capturedCanvasRight" style="display: none;"></canvas>
@@ -337,7 +337,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn--secondary waves-effect" type="button" data-dismiss="modal">Cancel</button>
-                    <button class="btn btn--primary waves-effect" id="btn-add-modal" type="submit">Add Report</button>
+                    <button class="btn btn--primary waves-effect" id="btn-add-report" type="submit">Add Report</button>
                 </div>
             </form>
         </div>
@@ -413,11 +413,18 @@
     const capturedCanvasFront = document.getElementById('capturedCanvasFront');
     const capturedImageFront = document.getElementById('capturedImageFront');
 
+    // set focus
+    startButtonFront.focus();
+
     let streamFront = null;
 
     startButtonFront.addEventListener('click', async () => {
         try {
-            streamFront = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            streamFront = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: "environment"
+                }
+            });
             cameraFeedFront.srcObject = streamFront;
             cameraFeedFront.style.display = 'block';
             startButtonFront.disabled = true;
@@ -463,11 +470,18 @@
     const capturedCanvasRight = document.getElementById('capturedCanvasRight');
     const capturedImageRight = document.getElementById('capturedImageRight');
 
+    // set focus
+    startButtonRight.focus();
+
     let streamRight = null;
 
     startButtonRight.addEventListener('click', async () => {
         try {
-            streamRight = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            streamRight = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: "environment"
+                }
+            });
             cameraFeedRight.srcObject = streamRight;
             cameraFeedRight.style.display = 'block';
             startButtonRight.disabled = true;
@@ -668,6 +682,55 @@
             right_image: {
                 required: true
             }
+        },
+        submitHandler: function(form) {
+            $('#addReportForm').on('submit', function(e) {
+                let isvalidate = $(this).valid();
+                let elBtn = $('#addReportForm [type="submit"]');
+
+                e.preventDefault();
+
+                if (isvalidate == false) {
+                    return false;
+                }
+
+                $.ajax({
+                    type: 'post',
+                    url: BASE_URL + 'report/insert',
+                    data: $('#addReportForm').serialize(),
+                    beforeSend: function() {
+                        btnLoader(elBtn);
+                    },
+                    success: function(response) {
+                        response = $.parseJSON(response);
+
+                        if (response.status == 'error') {
+                            notification('error', response.message);
+                        } else if (response.status == 'success') {
+                            notification('info', response.message);
+
+                            $('#addReportModal').modal('hide');
+
+                            table.draw(false);
+
+                            $('#addReportForm').find('select, input').val(null);
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status == 401) {
+                            window.location.replace(BASE_URL + 'login');
+                        }
+
+                        notification('error', xhr.status + ' ' + xhr.statusText, 3000, true);
+                    },
+                    complete: function() {
+                        setTimeout(function() {
+                            btnLoader(elBtn);
+                        }, 1000);
+                    }
+                });
+
+            });
         }
     });
 
@@ -677,54 +740,6 @@
             backdrop: 'static',
             keyboard: false
         });
-    });
-
-    $('#addReportForm').on('submit', function(e) {
-        let isvalidate = $(this).valid();
-        let elBtn = $('#addReportForm [type="submit"]');
-
-        e.preventDefault();
-
-        if (isvalidate == false) {
-            return false;
-        }
-
-        $.ajax({
-            type: 'post',
-            url: BASE_URL + 'report/insert',
-            data: $('#addReportForm').serialize(),
-            beforeSend: function() {
-                btnLoader(elBtn);
-            },
-            success: function(response) {
-                response = $.parseJSON(response);
-
-                if (response.status == 'error') {
-                    notification('error', response.message);
-                } else if (response.status == 'success') {
-                    notification('info', response.message);
-
-                    $('#addReportModal').modal('hide');
-
-                    table.draw(false);
-
-                    $('#addReportForm').find('select, input').val(null);
-                }
-            },
-            error: function(xhr) {
-                if (xhr.status == 401) {
-                    window.location.replace(BASE_URL + 'login');
-                }
-
-                notification('error', xhr.status + ' ' + xhr.statusText, 3000, true);
-            },
-            complete: function() {
-                setTimeout(function() {
-                    btnLoader(elBtn);
-                }, 1000);
-            }
-        });
-
     });
 
     function loadDataEdit(id) {
