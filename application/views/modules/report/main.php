@@ -417,9 +417,7 @@
 
     startButtonFront.addEventListener('click', async () => {
         try {
-            streamFront = await navigator.mediaDevices.getUserMedia({
-                video: true
-            });
+            streamFront = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
             cameraFeedFront.srcObject = streamFront;
             cameraFeedFront.style.display = 'block';
             startButtonFront.disabled = true;
@@ -446,7 +444,7 @@
 
     cancelButtonFront.addEventListener('click', () => {
         if (streamFront) {
-            const tracks = stream.getTracks();
+            const tracks = streamFront.getTracks();
             tracks.forEach(track => track.stop());
             cameraFeedFront.style.display = 'none';
             capturedCanvasFront.style.display = 'none';
@@ -469,9 +467,7 @@
 
     startButtonRight.addEventListener('click', async () => {
         try {
-            streamRight = await navigator.mediaDevices.getUserMedia({
-                video: true
-            });
+            streamRight = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
             cameraFeedRight.srcObject = streamRight;
             cameraFeedRight.style.display = 'block';
             startButtonRight.disabled = true;
