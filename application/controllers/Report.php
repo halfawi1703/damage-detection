@@ -1,11 +1,12 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 require_once APPPATH . '/core/Web_Controller.php';
 
-class Report extends Web_Controller {
-	
-	public function __construct()
+class Report extends Web_Controller
+{
+
+    public function __construct()
     {
         parent::__construct();
 
@@ -14,9 +15,8 @@ class Report extends Web_Controller {
         }
 
         $this->load->model('User_m');
-        
     }
-    
+
     public function index()
     {
         $data = [];
@@ -117,7 +117,7 @@ class Report extends Web_Controller {
 
                 $data[] = [
                     $value['id'],
-                    $value['first_name'] .' '. $value['last_name'],
+                    $value['first_name'] . ' ' . $value['last_name'],
                     $value['email'],
                     $value['phone'],
                     $value['status'] == 1 ? 'Active' : 'Non Active',
@@ -404,7 +404,7 @@ class Report extends Web_Controller {
 
         $this->db->trans_start();
 
-       
+
         $data_update = [
             'first_name' => $first_name,
             'last_name' => $last_name,

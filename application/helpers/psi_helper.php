@@ -202,3 +202,52 @@ function get_ip_info($field = '')
 
     return $output;
 }
+
+// Di dalam controller
+function image_coordinate($imagePath)
+{
+    // $imagePath = 'assets/icon-v2.png';
+    $output = [];
+
+    $path_info = pathinfo($imagePath);
+
+    $extension = strtolower($path_info['extension']);
+
+    if ($extension == 'jpg' || $extension == 'jpeg') {
+        
+        $exifData = exif_read_data($imagePath);
+
+        if (isset($exifData['GPSLatitude']) && isset($exifData['GPSLongitude'])) {
+
+            $longitude = array_map('floatval', $exifData['GPSLongitude']);
+            $latitude = array_map('floatval', $exifData['GPSLatitude']);
+            $longitudeR = $exifData['GPSLongitudeRef'];
+            $latitudeR = $exifData['GPSLatitudeRef'];
+
+            // Konversi ke format desimal
+            $latitudeDecimal = getDecimalCoordinate($latitude[0], $latitude[1], $latitude[2], $latitudeR);
+            $longitudeDecimal = getDecimalCoordinate($longitude[0], $longitude[1], $longitude[2], $longitudeR);
+            $secondLatitude = $latitude[2] / 10000;
+            $secondLongitude = $longitude[2] / 10000;
+
+            $output = [
+                'latitude' => [
+                    'degrees' => "{$latitude[0]}° {$latitude[1]}' {$secondLatitude}",
+                    'decimal' => $latitudeDecimal
+                ],
+                'longitude' => [
+                    'degrees' => "{$longitude[0]}° {$longitude[1]} '{$secondLongitude}",
+                    'decimal' => $longitudeDecimal
+                ]
+            ];
+        }
+    }
+
+    return $output;
+}
+
+function getDecimalCoordinate($deg, $min, $sec, $hem)
+{
+    $d = $deg + ((($min / 60) + ($sec / 3600)) / 100);
+    return ($hem == 'S' || $hem == 'W') ? $d *= -1 : $d;
+}

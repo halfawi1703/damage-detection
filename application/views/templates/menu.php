@@ -32,7 +32,7 @@
         padding: 24px 16px 12px;
         flex: 1 0 auto;
         position: relative;
-        background-color: #002E5D;
+        /* background-color: #002E5D; */
     }
 
     .nav-menu .heading::before {
@@ -67,9 +67,14 @@
         display: flex;
     }
 
-    .nav-menu .logo img {
+    /* .nav-menu .logo img {
         width: auto;
-        height: 36px;
+        height: 40px;
+    } */
+
+    .nav-menu .logo img {
+        width: 120px;
+        height: auto;
     }
 
     .nav-menu .menu {
@@ -88,8 +93,9 @@
     }
 
     .nav-menu .menu.active>.menu-item {
-        background-color: rgba(var(--color-primary-rgb), 0.05);
-        color: var(--color-primary);
+        /* background-color: rgba(var(--color-primary-rgb), 0.05); */
+        background-color: #FF9426;
+        color: var(--color-white);
     }
 
     .nav-menu .menu .menu-item {
@@ -299,7 +305,7 @@
             <a class="nav-toggle waves-effect" role="button" aria-expanded="false"></a>
             <a href="<?php echo base_url('overview'); ?>">
                 <div class="logo">
-                    <img class="lazyimg" data-src="<?php echo base_url('assets/logo-v1.gif'); ?>" alt="logo" title="Logo" width="148" height="36">
+                    <img class="lazyimg" data-src="<?php echo base_url('assets/logo.gif'); ?>" alt="logo" title="Logo" width="148" height="36">
                 </div>
             </a>
         </div>
