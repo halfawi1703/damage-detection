@@ -56,7 +56,7 @@ class Rscode
         return $output;
     }
 
-    public function output($code = '', $data = null, $error = null, $links = null)
+    public function output($code = '', $data = null, $pagination = null, $errors = null, $links = null)
     {
         $response_code = $this->_code($code);
 
@@ -67,13 +67,19 @@ class Rscode
         $output->response->status = $response_code[0];
         $output->response->message = $response_code[1];
         $output->response->timestamp = date('c');
+        
         if ($response_code[0] == 'error') {
             $output->response->error = (object)[
                 'code' => $code,
-                'reason' => $error
+                'reason' => $errors
             ];
         }
+
         $output->response->data = $data;
+
+        if ($pagination) {
+            $output->response->pagination = $pagination;
+        }
 
         if ($links) {
             $hyperlink = $this->_hyperlink($links);

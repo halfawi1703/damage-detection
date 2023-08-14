@@ -88,6 +88,14 @@
         margin-bottom: 10px;
         margin-top: 10px;
     }
+
+    .div-search-police-number {
+        margin-bottom: 20px;
+    }
+
+    .title-section {
+        margin-bottom: 10px;
+    }
 </style>
 <div class="app-content">
     <div class="page-header">
@@ -142,9 +150,20 @@
             </div>
             <form id="addReportForm">
                 <div class="modal-body">
+                    <div class="row div-search-police-number">
+                        <div class="col-md-12">
+                            <div class="input-group">
+                                <input type="text" name="search_police_number" class="form-control" placeholder="Masukan Nomor Polisi / Nomor Rangka / Nomor Mesin">
+                                <div class="input-group-append">
+                                    <a class="btn btn--primary" id="search_police_number">Search</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="row">
                         <div class="col-md-12">
-                            <h6><?php echo $this->lang->line('vehicle_unit_information'); ?></h6>
+                            <h6 class="title-section"><?php echo $this->lang->line('vehicle_unit_information'); ?></h6>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -188,9 +207,9 @@
                                 </select>
                             </div>
                         </div>
-
+                        
                         <div class="col-md-12">
-                            <h6><?php echo $this->lang->line('insured_information'); ?></h6>
+                            <h6 class="title-section"><?php echo $this->lang->line('insured_information'); ?></h6>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -206,7 +225,7 @@
                         </div>
 
                         <div class="col-md-12">
-                            <h6><?php echo $this->lang->line('reporting_information'); ?></h6>
+                            <h6 class="title-section"><?php echo $this->lang->line('reporting_information'); ?></h6>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -246,7 +265,7 @@
                         </div>
 
                         <div class="col-md-12">
-                            <h6><?php echo $this->lang->line('event_information'); ?></h6>
+                            <h6 class="title-section"><?php echo $this->lang->line('event_information'); ?></h6>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -278,7 +297,7 @@
                         </div>
 
                         <div class="col-md-12">
-                            <h6>Foto Kendaraan</h6>
+                            <h6 class="title-section">Foto Kendaraan</h6>
                         </div><br><br>
                         <div class="col-md-6">
                             <div class="card-file">
@@ -640,7 +659,7 @@
             },
             machine_number: {
                 required: true,
-                minlength: 12,
+                minlength: 10,
                 maxlength: 12
             },
             chassis_number: {
@@ -669,6 +688,9 @@
             event_date: {
                 required: true
             },
+            event_type: {
+                required: true
+            },
             event_location: {
                 required: true
             },
@@ -677,12 +699,12 @@
                 minlength: 5,
                 maxlength: 225
             },
-            front_image: {
-                required: true
-            },
-            right_image: {
-                required: true
-            }
+            // front_image: {
+            //     required: true
+            // },
+            // right_image: {
+            //     required: true
+            // }
         },
         submitHandler: function(form) {
             $('#addReportForm').on('submit', function(e) {

@@ -89,8 +89,10 @@ class PSI_Controller extends REST_Controller
             $get_session_payload['filter'],
             $get_session_payload['sort']
         );
+
         $session = $get_session ? $get_session[0] : null;
 		
+        
         if (!$session) {
             $output = $this->rscode->output('1005', null, false, $links);
 
@@ -106,6 +108,7 @@ class PSI_Controller extends REST_Controller
         $decode = $this->decode_token($access_token, 'access_token');
 
         if (!$decode) {
+            
             $output = $this->rscode->output('1005', null, false, $links);
 
             $this->response($output->response, $output->code);
@@ -113,6 +116,7 @@ class PSI_Controller extends REST_Controller
 
         // Check Expired Token
         if (time() > $decode->exp) {
+
             $output = $this->rscode->output('1004', null, false, $links);
 
             $this->response($output->response, $output->code);

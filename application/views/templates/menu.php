@@ -33,6 +33,7 @@
         flex: 1 0 auto;
         position: relative;
         /* background-color: #002E5D; */
+        border-bottom: solid;
     }
 
     .nav-menu .heading::before {
@@ -346,7 +347,7 @@
                     </li>
                     <li class="<?php echo @$menu_active == 'file' ? 'menu active' : 'menu'; ?>">
                         <a href="<?php echo base_url('file'); ?>" class="menu-item">
-                            <div class="menu-item__label">Upload File Limit</div>
+                            <div class="menu-item__label">Panel</div>
                         </a>
                     </li>
                 </ul>

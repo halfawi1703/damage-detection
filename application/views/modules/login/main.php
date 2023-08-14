@@ -16,7 +16,8 @@
     max-width: 400px;
 }
 .login .card-header {
-    padding: 48px 40px 0;
+    /* padding: 48px 40px 0; */
+    padding: 25px 0px 0;
     border: none;
     background-color: unset;
 }
@@ -24,7 +25,8 @@
     text-align: center;
 }
 .login .card-body {
-    padding: 24px 32px 40px;
+    /* padding: 24px 32px 40px; */
+    padding: 17px 32px 40px;
 }
 .login .logo {
     display: flex;
@@ -32,7 +34,7 @@
     margin-bottom: 24px;
 }
 .login .logo img {
-    height: 40px;
+    height: 50px;
     width: auto;
 }
 .login .forgot-password {
