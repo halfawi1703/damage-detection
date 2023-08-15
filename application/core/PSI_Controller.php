@@ -57,7 +57,7 @@ class PSI_Controller extends REST_Controller
                 $access_token = $matches[1];
         	}
     	}
-
+        
         $links = [
             [
                 'href' => $_SERVER['QUERY_STRING'] ? '/' . uri_string() . '?' . $_SERVER['QUERY_STRING'] : '/' . uri_string(),
@@ -91,7 +91,6 @@ class PSI_Controller extends REST_Controller
         );
 
         $session = $get_session ? $get_session[0] : null;
-		
         
         if (!$session) {
             $output = $this->rscode->output('1005', null, false, $links);
@@ -172,7 +171,7 @@ class PSI_Controller extends REST_Controller
            $decode = JWT::decode($token, $secret_key, array('HS256'));
 
            $data = $decode;
-
+            
            return $data;
         } catch (Exception $e) {
             return false;

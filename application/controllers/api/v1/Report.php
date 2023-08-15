@@ -137,8 +137,9 @@ class Report extends PSI_Controller
 
     public function index_post()
     {
+        
         $this->auth();
-
+        
         $data = [];
         $pagination = [];
         $errors = [];
@@ -149,7 +150,7 @@ class Report extends PSI_Controller
         $machine_number = $this->post('machine_number');
         $chassis_number = $this->post('chassis_number');
         $vehicle_brand = $this->post('vehicle_brand');
-        $vehicle_variant = $this->post('vehicle_variant');
+        $vehicle_model = $this->post('vehicle_model');
         $vehicle_year = $this->post('vehicle_year');
 
         $insured_police_number = $this->post('insured_police_number');
@@ -193,8 +194,8 @@ class Report extends PSI_Controller
                 'rules' => 'trim|required',
             ],
             [
-                'field' => 'vehicle_variant',
-                'label' => 'Vehicle Variant',
+                'field' => 'vehicle_model',
+                'label' => 'Vehicle Model',
                 'rules' => 'trim|required',
             ],
             [
@@ -256,7 +257,7 @@ class Report extends PSI_Controller
         if ($this->form_validation->run() == false) {
             $errors = $this->form_validation->error_array();
 
-            $output = $this->rscode->output('1001', null, $errors, $links);
+            $output = $this->rscode->output('1007', $data, $pagination, $errors, $links);
 
             $this->response($output->response, $output->code);
         }
@@ -271,7 +272,7 @@ class Report extends PSI_Controller
             'machine_number' => $machine_number,
             'chassis_number' => $chassis_number,
             'merk_id' => $vehicle_brand,
-            'vehicle_variant_id' => $vehicle_variant,
+            'vehicle_model_id' => $vehicle_model,
             'year' => $vehicle_year,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
@@ -282,7 +283,7 @@ class Report extends PSI_Controller
         if (!$insert_vehicle_unit) {
 
             $errors = ['Failed insert data Vehicle Unit'];
-            $output = $this->rscode->output('0000', $data, $pagination, $errors, $links);
+            $output = $this->rscode->output('1007', $data, $pagination, $errors, $links);
             $this->response($output->response, $output->code);
         }
 
@@ -302,7 +303,7 @@ class Report extends PSI_Controller
         if (!$insert_insured) {
 
             $errors = ['Failed insert data Insured'];
-            $output = $this->rscode->output('0000', $data, $pagination, $errors, $links);
+            $output = $this->rscode->output('1007', $data, $pagination, $errors, $links);
             $this->response($output->response, $output->code);
         }
 
@@ -330,7 +331,7 @@ class Report extends PSI_Controller
         if (!$insert_customer) {
 
             $errors = ['Failed insert data Customer'];
-            $output = $this->rscode->output('0000', $data, $pagination, $errors, $links);
+            $output = $this->rscode->output('1007', $data, $pagination, $errors, $links);
             $this->response($output->response, $output->code);
         }
 
@@ -352,7 +353,7 @@ class Report extends PSI_Controller
         if (!$insert_event) {
 
             $errors = ['Failed insert data Event'];
-            $output = $this->rscode->output('0000', $data, $pagination, $errors, $links);
+            $output = $this->rscode->output('1007', $data, $pagination, $errors, $links);
             $this->response($output->response, $output->code);
         }
 
@@ -366,7 +367,7 @@ class Report extends PSI_Controller
             'customer_id' => $customer_id,
             'event_id' => $event_id,
             'surveyor_id' => null,
-            'event_status_id' => null,
+            'claim_status_id' => 1,
             'created_by' => null,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
@@ -377,7 +378,7 @@ class Report extends PSI_Controller
         if (!$insert_claim) {
 
             $errors = ['Failed insert data Claim'];
-            $output = $this->rscode->output('0000', $data, $pagination, $errors, $links);
+            $output = $this->rscode->output('1007', $data, $pagination, $errors, $links);
             $this->response($output->response, $output->code);
         }
 
@@ -390,7 +391,7 @@ class Report extends PSI_Controller
 
         $data = [];
 
-        $output = $this->rscode->output('0000', $data, $pagination, $errors, $links);
+        $output = $this->rscode->output('1006', $data, $pagination, $errors, $links);
 
         $this->response($output->response, $output->code);
     }

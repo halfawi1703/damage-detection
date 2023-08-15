@@ -9,9 +9,7 @@ class Request extends Web_Controller {
     {
         parent::__construct();
 
-        if (!$this->is_login) {
-            redirect('login');
-        }
+        $this->auth();
         
     }
     

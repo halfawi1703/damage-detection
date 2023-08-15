@@ -356,12 +356,12 @@
         <div class="user">
             <div class="profile-pic">
                 <div class="image">
-                    <div class="initial"><?php echo substr($userdata['first_name'], 0, 1); ?></div>
+                    <div class="initial"><?php echo substr($this->userdata->first_name, 0, 1); ?></div>
                 </div>
             </div>
             <div class="detail">
-                <div class="name"><?php echo $userdata['first_name'] . ' (' . @$userdata['role'][0]->name . ')'; ?></div>
-                <div class="email"><?php echo $userdata['email']; ?></div>
+                <div class="name"><?php echo $this->userdata->first_name . ' (' . @$this->userdata->role[0]->name . ')'; ?></div>
+                <div class="email"><?php echo $this->userdata->email; ?></div>
             </div>
             <div class="action">
                 <a href="<?php echo base_url('auth/logout'); ?>" data-toggle="tooltip" title="Logout" aria-labelledby="Logout">

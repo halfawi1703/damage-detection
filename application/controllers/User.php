@@ -10,9 +10,7 @@ class User extends Web_Controller
     {
         parent::__construct();
 
-        if (!$this->is_login) {
-            redirect('login');
-        }
+        $this->auth();
 
         $this->load->model('User_m');
 
@@ -22,9 +20,6 @@ class User extends Web_Controller
     public function index()
     {
         $data = [];
-
-        $data['is_login'] = $this->is_login;
-        $data['userdata'] = $this->userdata;
 
         $data['breadcrumb'] = [
             [

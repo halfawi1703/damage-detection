@@ -1,4 +1,4 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+<link rel="stylesheet" href="<?php echo base_url('assets/css/select2.min.css'); ?>">
 <style>
     .error {
         color: red;
@@ -160,7 +160,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-12">
                             <h6 class="title-section"><?php echo $this->lang->line('vehicle_unit_information'); ?></h6>
@@ -188,13 +188,16 @@
                                 <label for="vehicle_brand" class="label"><?php echo $this->lang->line('vehicle_brand'); ?> <span class="required">*</span></label>
                                 <select class="form-control" id="vehicle_brand" name="vehicle_brand">
                                     <option value="">--- Please Select ---</option>
+                                    <?php foreach ($vehicle_brand->data as $key => $value) : ?>
+                                        <option value="<?php echo $value->id; ?>"><?php echo $value->name; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="vehicle_variant" class="label"><?php echo $this->lang->line('vehicle_variant'); ?> <span class="required">*</span></label>
-                                <select class="form-control" id="vehicle_variant" name="vehicle_variant">
+                                <label for="vehicle_model" class="label"><?php echo $this->lang->line('vehicle_model'); ?> <span class="required">*</span></label>
+                                <select class="form-control" id="vehicle_model" name="vehicle_model" disabled>
                                     <option value="">--- Please Select ---</option>
                                 </select>
                             </div>
@@ -204,10 +207,13 @@
                                 <label for="vehicle_year" class="label"><?php echo $this->lang->line('vehicle_year'); ?> <span class="required">*</span></label>
                                 <select class="form-control" id="vehicle_year" name="vehicle_year">
                                     <option value="">--- Please Select ---</option>
+                                    <?php for ($year = 1991; $year <= 2023; $year++) { ?>
+                                        <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-12">
                             <h6 class="title-section"><?php echo $this->lang->line('insured_information'); ?></h6>
                         </div>
@@ -278,14 +284,19 @@
                                 <label for="event_type" class="label"><?php echo $this->lang->line('event_type'); ?></label>
                                 <select class="form-control" id="event_type" name="event_type">
                                     <option value="">--- Please Select ---</option>
+                                    <option value="1">KECELAKAAN</option>
+                                    <option value="2">BANJIR</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="event_location" class="label"><?php echo $this->lang->line('event_location'); ?> <span class="required">*</span></label>
-                                <select class="form-control" id="event_location" name="event_location">
+                                <select class="form-control" id="event_location" name="event_location" style="width: 100%;">
                                     <option value="">--- Please Select ---</option>
+                                    <?php foreach ($city->data as $key => $value) : ?>
+                                        <option value="<?php echo $value->id; ?>"><?php echo $value->name; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
@@ -398,16 +409,197 @@
                 <input id="id" class="form-control" type="hidden" name="id" value="" />
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-md-12">
+                            <h6 class="title-section"><?php echo $this->lang->line('vehicle_unit_information'); ?></h6>
+                        </div>
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="first_name" class="label-email">Name</label>
-                                <input id="first_name" class="form-control" type="text" name="first_name" value="" />
+                                <label for="police_number" class="label"><?php echo $this->lang->line('police_number'); ?> <span class="required">*</span></label>
+                                <input id="police_number" class="form-control" type="text" name="police_number" value="" />
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="last_name" class="label">First Name</label>
-                                <input id="last_name" class="form-control" type="text" name="last_name" value="" />
+                                <label for="machine_number" class="label"><?php echo $this->lang->line('machine_number'); ?> <span class="required">*</span></label>
+                                <input id="machine_number" class="form-control" type="text" name="machine_number" value="" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="chassis_number" class="label"><?php echo $this->lang->line('chassis_number'); ?> <span class="required">*</span></label>
+                                <input id="chassis_number" class="form-control" type="text" name="chassis_number" value="" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="vehicle_brand" class="label"><?php echo $this->lang->line('vehicle_brand'); ?> <span class="required">*</span></label>
+                                <select class="form-control" id="vehicle_brand" name="vehicle_brand">
+                                    <option value="">--- Please Select ---</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="vehicle_model" class="label"><?php echo $this->lang->line('vehicle_model'); ?> <span class="required">*</span></label>
+                                <select class="form-control" id="vehicle_model" name="vehicle_model" disabled>
+                                    <option value="">--- Please Select ---</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="vehicle_year" class="label"><?php echo $this->lang->line('vehicle_year'); ?> <span class="required">*</span></label>
+                                <select class="form-control" id="vehicle_year" name="vehicle_year">
+                                    <option value="">--- Please Select ---</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <h6 class="title-section"><?php echo $this->lang->line('insured_information'); ?></h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="insured_police_number" class="label"><?php echo $this->lang->line('insured_police_number'); ?></label>
+                                <input id="insured_police_number" class="form-control" type="text" name="insured_police_number" value="" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="insured_name" class="label"><?php echo $this->lang->line('insured_name'); ?></label>
+                                <input id="insured_name" class="form-control" type="text" name="insured_name" value="" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <h6 class="title-section"><?php echo $this->lang->line('reporting_information'); ?></h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="reporting_name" class="label"><?php echo $this->lang->line('reporting_name'); ?> <span class="required">*</span></label>
+                                <input id="reporting_name" class="form-control" type="text" name="reporting_name" value="" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="reporting_phone_number" class="label"><?php echo $this->lang->line('reporting_phone_number'); ?></label>
+                                <input id="reporting_phone_number" class="form-control" type="text" name="reporting_phone_number" value="" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="reporting_email" class="label"><?php echo $this->lang->line('reporting_email'); ?></label>
+                                <input id="reporting_email" class="form-control" type="text" name="reporting_email" value="" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="rider_name" class="label"><?php echo $this->lang->line('rider_name'); ?> <span class="required">*</span></label>
+                                <input id="rider_name" class="form-control" type="text" name="rider_name" value="" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="rider_phone_number" class="label"><?php echo $this->lang->line('rider_phone_number'); ?></label>
+                                <input id="rider_phone_number" class="form-control" type="text" name="rider_phone_number" value="" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="sim_expired_date" class="label"><?php echo $this->lang->line('sim_expired_date'); ?> <span class="required">*</span></label>
+                                <input id="sim_expired_date" class="form-control" type="date" name="sim_expired_date" value="" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <h6 class="title-section"><?php echo $this->lang->line('event_information'); ?></h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="event_date" class="label"><?php echo $this->lang->line('event_date'); ?> <span class="required">*</span></label>
+                                <input id="event_date" class="form-control" type="date" name="event_date" value="" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="event_type" class="label"><?php echo $this->lang->line('event_type'); ?></label>
+                                <select class="form-control" id="event_type" name="event_type">
+                                    <option value="">--- Please Select ---</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="event_location" class="label"><?php echo $this->lang->line('event_location'); ?> <span class="required">*</span></label>
+                                <select class="form-control" id="event_location" name="event_location">
+                                    <option value="">--- Please Select ---</option>
+                                    <?php foreach ($city as $key => $value) : ?>
+                                        <option value="<?php echo $value['id']; ?>"><?php echo $value['name']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="event_chronology" class="label"><?php echo $this->lang->line('event_chronology'); ?> <span class="required">*</span></label>
+                                <textarea class="form-control" name="event_chronology" id="event_chronology" cols="40" rows="5"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <h6 class="title-section">Foto Kendaraan</h6>
+                        </div><br><br>
+                        <div class="col-md-6">
+                            <div class="card-file">
+                                <div class="card-file-header">
+                                    <p>Ambil Foto Bagian Depan <span class="required">*</span></p>
+                                </div>
+                                <div class="card-body">
+                                    <video id="cameraFeedFront" autoplay style="display: none;"></video>
+                                    <a class="btn btn--primary" id="startButtonFront"> <i class="fa fa-camera"></i></a>
+                                    <button class="btn btn--secondary" id="captureButtonFront" disabled> <i class="fa fa-image"></i></button>
+                                    <button class="btn btn-danger" id="cancelButtonFront" disabled> <i class="fa fa-trash"></i></button>
+                                    <canvas id="capturedCanvasFront" style="display: none;"></canvas>
+                                    <img id="capturedImageFront" style="display: none;">
+                                    <input type="hidden" name="front_image" id="front_image" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card-file">
+                                <div class="card-file-header">
+                                    <p>Contoh Gambar Bagian Depan</p>
+                                </div>
+                                <div class="card-body">
+                                    <img src="<?php echo base_url('assets/no-image.png'); ?>" id="sampleImage" alt="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card-file">
+                                <div class="card-file-header">
+                                    <p>Unggah Gambar Bagian Kanan <span class="required">*</span></p>
+                                </div>
+                                <div class="card-body">
+                                    <video id="cameraFeedRight" autoplay style="display: none;"></video>
+                                    <a class="btn btn--primary" id="startButtonRight"> <i class="fa fa-camera"></i></a>
+                                    <button class="btn btn--secondary" id="captureButtonRight" disabled> <i class="fa fa-image"></i></button>
+                                    <button class="btn btn-danger" id="cancelButtonRight" disabled> <i class="fa fa-trash"></i></button>
+                                    <canvas id="capturedCanvasRight" style="display: none;"></canvas>
+                                    <img id="capturedImageRight" style="display: none;">
+                                    <input type="hidden" name="right_image" id="right_image" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card-file">
+                                <div class="card-file-header">
+                                    <p>Contoh Gambar Bagian Kanan</p>
+                                </div>
+                                <div class="card-body">
+                                    <img src="<?php echo base_url('assets/no-image.png'); ?>" id="sampleImage" alt="">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -420,6 +612,7 @@
         </div>
     </div>
 </div>
+<script src="<?php echo base_url('assets/js/jquery.validate.min.js') ?>"></script>
 <script src="<?php echo base_url('assets/js/select2.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/jquery.dataTables.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/dataTables.bootstrap4.min.js'); ?>"></script>
@@ -542,6 +735,53 @@
     // take picture from behind
 </script>
 <script>
+    $('#event_location').select2({
+        placeholder: "--- Select ---",
+        allowClear: true
+    });
+
+    $('#vehicle_brand').on('change', function() {
+
+        let brand_id = $(this).val();
+
+        if (brand_id) {
+
+            $.ajax({
+                dataType: 'JSON',
+                data: {
+                    brand_id: brand_id
+                },
+                url: BASE_URL + 'report/vehicle_model',
+                beforeSend: function() {
+                    $('#vehicle_model').val('');
+                    $('#vehicle_model').attr('disabled', true);
+                },
+                success: function(response) {
+
+                    let data = response.data;
+
+                    if (response.status == 'error') {
+                        return false;
+                    }
+
+                    $('#vehicle_model').empty();
+                    $('#vehicle_model').append('<option value="">--- Select Model ---</option>');
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#vehicle_model').append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
+                    }
+
+                    $('#vehicle_model').attr('disabled', false);
+                }
+            });
+        } else {
+
+            $("#vehicle_model").val('');
+            $('#vehicle_model').attr('disabled', true);
+            $('#vehicle_model').trigger('change');
+        }
+    });
+
     let tabSelected = '<?php echo @$tab_selected ?: ''; ?>';
     let menuActive = '<?php echo @$menu_active ?: ''; ?>';
 
@@ -670,7 +910,7 @@
             vehicle_brand: {
                 required: true
             },
-            vehicle_variant: {
+            vehicle_model: {
                 required: true
             },
             vehicle_year: {
@@ -782,8 +1022,27 @@
                     keyboard: false
                 });
                 $('#editReportForm [name="id"]').val(data.id);
-                $('#editReportForm [name="first_name"]').val(data.first_name);
-                $('#editReportForm [name="last_name"]').val(data.last_name);
+                $('#editReportForm [name="police_number"]').val(data.police_number);
+                $('#editReportForm [name="machine_number"]').val(data.machine_number);
+                $('#editReportForm [name="vehicle_brand"]').val(data.vehicle_brand);
+                $('#editReportForm [name="chassis_number"]').val(data.chassis_number);
+                $('#editReportForm [name="vehicle_model"]').val(data.vehicle_model);
+                $('#editReportForm [name="vehicle_year"]').val(data.vehicle_year);
+
+                $('#editReportForm [name="insured_police_number"]').val(data.insured_police_number);
+                $('#editReportForm [name="insured_name"]').val(data.insured_name);
+
+                $('#editReportForm [name="reporting_name"]').val(data.reporting_name);
+                $('#editReportForm [name="reporting_phone_number"]').val(data.reporting_phone_number);
+                $('#editReportForm [name="reporting_email"]').val(data.reporting_email);
+                $('#editReportForm [name="rider_name"]').val(data.rider_name);
+                $('#editReportForm [name="rider_phone_number"]').val(data.rider_phone_number);
+                $('#editReportForm [name="sim_expired_date"]').val(data.sim_expired_date);
+
+                $('#editReportForm [name="event_date"]').val(data.event_date);
+                $('#editReportForm [name="event_type"]').val(data.event_type);
+                $('#editReportForm [name="event_location"]').val(data.event_location);
+                $('#editReportForm [name="event_chronology"]').val(data.event_chronology);
 
             },
             error: function(xhr) {

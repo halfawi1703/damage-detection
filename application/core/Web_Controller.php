@@ -1,48 +1,32 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
- * psi Codeigniter Base Controller
+ * ALT Codeigniter Base Controller
  *
  * @package         CodeIgniter
- * @subpackage      Primasis CodeIgniter Base Controller
+ * @subpackage      ALT CodeIgniter Base Controller
  * @category        Controller
- * @author          Halfawi
- * @license         LapakRumpin
- * @link            https://www.lapakrumpin.id
+ * @author          Shures Arwasyi
+ * @license         Alternate Creative
+ * @link            https://www.alternatecreative.id
  * @version         1.0.0
  */
 
+require 'vendor/autoload.php'; // Jika menggunakan library Firebase JWT
 use \Firebase\JWT\JWT;
 
 class Web_Controller extends CI_Controller
 {
 
-	private $user_credential;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->get_userdata();
-        
-        $this->is_login = @$this->session->userdata('id') ? true : false;
-        $this->userdata = @$this->session->userdata ?: null;
-
-		date_default_timezone_set('Asia/Jakarta'); 
-    }
+    private $user_credential;
 
     protected function auth()
     {
-        $links = []; 
-        // JWT Auth middleware
-        $headers = $this->input->get_request_header('_psi_session');
+        $links = [];
 
-       	if (!empty($headers)) {
-        	if (preg_match('/Bearer\s(\S+)/', $headers , $matches)) {
-                $access_token = $matches[1];
-        	}
-    	}
+        // JWT Auth middleware
+        $access_token = $_COOKIE['_psi_session'];
 
         $decode = $this->decode_token($access_token, 'access_token');
 
@@ -72,30 +56,15 @@ class Web_Controller extends CI_Controller
         }
 
         try {
-           $decode = JWT::decode($token, $secret_key, array('HS256'));
 
-           $data = $decode;
+            $decode = JWT::decode($token, $secret_key, array('HS256'));
 
-           return $data;
+            $data = $decode;
+
+            return $data;
         } catch (Exception $e) {
             return false;
+            // echo 'Error: ' . $e->getMessage();
         }
     }
-
-    protected function get_userdata()
-    {
-        $userdata = (@$_COOKIE['_psi_userdata'] && @$_COOKIE['_psi_session']) ? json_decode($_COOKIE['_psi_userdata']) : null;
-
-        $this->userdata = $userdata;
-        $this->is_login = $userdata ? true : false;
-
-        if (!$this->is_login) {
-            if (@$_COOKIE['_psi_userdata']) {
-                setcookie('_psi_session', '', time() - 3600, "/", $this->config->item('domain_name'), true, true);
-                setcookie('_psi_rsession', '', time() - 3600, "/", $this->config->item('domain_name'), true, true);
-                setcookie('_psi_userdata', '', time() - 3600, "/", $this->config->item('domain_name'), true, true);
-            }
-        }
-    }
-	
 }

@@ -19,7 +19,7 @@ $lang['vehicle_unit_information'] = 'Informasi Unit Kendaraan';
 $lang['police_number'] = 'Nomor Polisi';
 $lang['vehicle_brand'] = 'Merk Kendaraan';
 $lang['machine_number'] = 'Nomor Mesin';
-$lang['vehicle_variant'] = 'Varian Kendaraan';
+$lang['vehicle_model'] = 'Model Kendaraan';
 $lang['chassis_number'] = 'Nomor Rangka';
 $lang['vehicle_year'] = 'Tahun Kendaraan';
 

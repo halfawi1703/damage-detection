@@ -25,7 +25,7 @@ class Claim_m extends CI_Model
                 'vehicle_unit.machine_number',
                 'vehicle_unit.chassis_number',
                 'vehicle_unit.merk_id',
-                'vehicle_unit.vehicle_variant_id',
+                'vehicle_unit.vehicle_model_id',
                 'event.event_type_id',
                 'event_type.name event_type_name',
                 'event.description',
@@ -93,6 +93,11 @@ class Claim_m extends CI_Model
         if (count($data) > 0) {
             foreach ($data as $key => $value) {
                 $row = $value;
+
+                if (@$row['id']) {
+                    $row['id'] = (int) $row['id'];
+                }
+
                 $output[$key] = $row;
             }
         }

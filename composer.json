@@ -12,6 +12,7 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
+		"firebase/php-jwt": "^6.1",
 		"vlucas/phpdotenv": "*"
 	},
 	"suggest": {

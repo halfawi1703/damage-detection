@@ -50,24 +50,10 @@ class Auth extends Web_Controller
         ];
 
         if (@$auth->status == 'success') {
-            $output->data->redirect_url = base_url();
+            $output->data->redirect_url = base_url('auth/redirect');
 
-			$session_data = $this->decode_token($output->data->access_token, 'access_token');
-
-			$session = [
-				'id' => $session_data->id,
-				'email' => $session_data->email,
-				'first_name' => $session_data->first_name,
-				'last_name' => $session_data->last_name,
-				'role' => $session_data->role,
-				'expired' => date('Y-m-d H:i:s',$session_data->exp),
-				'time' => date('Y-m-d H:i:s')
-			];
-
-			$this->session->set_userdata($session);
-            
-            // setcookie('_psi_session', $output->data->access_token, time() + 60 * 60 * 12, "/");
-            // setcookie('_psi_rsession', $output->data->refresh_token, time() + 60 * 60 * 24 * 14, "/");
+            setcookie('_psi_session', $output->data->access_token, time() + 60 * 60 * 12, "/", $this->config->item('domain_name'), true, true);
+            setcookie('_psi_rsession', $output->data->refresh_token, time() + 60 * 60 * 24 * 14, "/", $this->config->item('domain_name'), true, true);
         } else {
             $output->data->redirect_url = null;
         }
@@ -76,17 +62,45 @@ class Auth extends Web_Controller
         exit();
     }
 
+    public function redirect()
+    {
+        // Get Profile
+        $profile = api_request('GET', 'v1/user');
+        $profile = @$profile->data ?: null;
+
+        if (!$profile) {
+            redirect(base_url());
+        }
+
+        setcookie('_psi_userdata', '', time() - 3600, "/", $this->config->item('domain_name'), true, true);
+        setcookie('_psi_userdata', json_encode($profile), time() + 60 * 60 * 12, "/", $this->config->item('domain_name'), true, true);
+
+        redirect(base_url('overview'));
+    }
+
     public function logout()
     {
         $auth = api_request('POST', 'v1/auth/logout');
 
-        $this->session->sess_destroy();
+        setcookie('_psi_session', '', time() - 3600, "/", $this->config->item('domain_name'), true, true);
+        setcookie('_psi_rsession', '', time() - 3600, "/", $this->config->item('domain_name'), true, true);
+        setcookie('_psi_userdata', '', time() - 3600, "/", $this->config->item('domain_name'), true, true);
 
-        unset($_COOKIE['_psi_session']);
-        unset($_COOKIE['_psi_rsession']);
-
-        redirect('/login');
+        redirect(base_url());
         exit();
     }
+
+    // public function logout()
+    // {
+    //     $auth = api_request('POST', 'v1/auth/logout');
+
+    //     // $this->session->sess_destroy();
+
+    //     unset($_COOKIE['_psi_session']);
+    //     unset($_COOKIE['_psi_rsession']);
+
+    //     redirect('/login');
+    //     exit();
+    // }
 
 }

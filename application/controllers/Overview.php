@@ -9,18 +9,12 @@ class Overview extends Web_Controller {
     {
         parent::__construct();
 
-        if (!$this->is_login) {
-            redirect('login');
-        }
-        
+        $this->auth();
     }
     
     public function index()
     {
         $data = [];
-
-        $data['is_login'] = $this->is_login;
-        $data['userdata'] = $this->userdata;
 
         $data['breadcrumb'] = [
             [

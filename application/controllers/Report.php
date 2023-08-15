@@ -10,9 +10,7 @@ class Report extends Web_Controller
     {
         parent::__construct();
 
-        if (!$this->is_login) {
-            redirect('login');
-        }
+        $this->auth();
 
         $this->load->model('User_m');
     }
@@ -20,9 +18,6 @@ class Report extends Web_Controller
     public function index()
     {
         $data = [];
-
-        $data['is_login'] = $this->is_login;
-        $data['userdata'] = $this->userdata;
 
         $data['breadcrumb'] = [
             [
@@ -33,6 +28,9 @@ class Report extends Web_Controller
 
         $data['page_title'] = 'Report';
         $data['menu_active'] = 'report';
+
+        $data['vehicle_brand'] = $this->vehicle_brand();
+        $data['city'] = $this->location_city();
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/menu', $data);
@@ -74,7 +72,6 @@ class Report extends Web_Controller
             }
         }
 
-        
         $output = [
             "draw" => $this->input->get('draw'),
             "recordsTotal" => $result->pagination->total_record,
@@ -89,30 +86,14 @@ class Report extends Web_Controller
     {
         $id = $this->input->get('id');
 
-        $user_payload['page'] = [
-            'offset' => 0,
-            'limit' => 1
+        # count user
+        $api_payload = [
+            'id' => $id
         ];
 
-        $user_payload['column'] = [];
+        $result = api_request('GET', 'v1/report', $api_payload);
 
-        $user_payload['filter']['id'] = $id;
-        $user_payload['filter']['status'] = 1;
-
-        $user_payload['sort'] = [];
-
-        $user = [];
-
-        $user = $this->User_m->get_user(
-            $user_payload['page'],
-            $user_payload['column'],
-            $user_payload['filter'],
-            $user_payload['sort']
-        );
-
-        $user = @$user ? $user[0] : null;
-
-        if (!$user) {
+        if (!$result->data) {
 
             $output = (object)[
                 'status' => 'error',
@@ -124,7 +105,7 @@ class Report extends Web_Controller
             exit();
         }
 
-        echo json_encode($user);
+        echo json_encode($result->data);
         exit();
     }
 
@@ -134,7 +115,7 @@ class Report extends Web_Controller
         $machine_number = $this->input->post('machine_number');
         $chassis_number = $this->input->post('chassis_number');
         $vehicle_brand = $this->input->post('vehicle_brand');
-        $vehicle_variant = $this->input->post('vehicle_variant');
+        $vehicle_model = $this->input->post('vehicle_model');
         $vehicle_year = $this->input->post('vehicle_year');
 
         $insured_police_number = $this->input->post('insured_police_number');
@@ -178,7 +159,7 @@ class Report extends Web_Controller
                 'rules' => 'trim|required',
             ],
             [
-                'field' => 'vehicle_variant',
+                'field' => 'vehicle_model',
                 'label' => 'Vehicle Variant',
                 'rules' => 'trim|required',
             ],
@@ -238,13 +219,14 @@ class Report extends Web_Controller
             echo json_encode($output);
             exit();
         }
+
         # count user
         $api_payload = [
             'police_number' => $police_number,
             'machine_number' => $machine_number,
             'chassis_number' => $chassis_number,
             'vehicle_brand' => $vehicle_brand,
-            'vehicle_variant' => $vehicle_variant,
+            'vehicle_model' => $vehicle_model,
             'vehicle_year' => $vehicle_year,
             'insured_police_number' => $insured_police_number,
             'insured_name' => $insured_name,
@@ -261,9 +243,9 @@ class Report extends Web_Controller
             'front_image' => $front_image,
             'right_image' => $right_image
         ];
-
+        
         $insert = api_request('POST', 'v1/report', $api_payload);
-
+   
         if (!$insert->message == 'error') {
 
             $output = (object)[
@@ -434,5 +416,105 @@ class Report extends Web_Controller
 
         echo json_encode($output);
         exit();
+    }
+
+    public function vehicle_brand()
+    {
+        $output = (object) [];
+
+        # count user
+        $api_payload = [
+            'page' => 1,
+            'limit' => 500
+        ];
+
+        $result = api_request('GET', 'v1/vehicle/brand', $api_payload);
+
+        if ($result->status == 'error') {
+
+            $output = (object)[
+                'status' => 'error',
+                'message' => 'Error',
+                'data' => (object)[]
+            ];
+        }
+
+        $output = (object)[
+            'status' => 'success',
+            'message' => 'Success',
+            'data' => $result->data
+        ];
+
+        return $output;
+    }
+
+    public function vehicle_model()
+    {
+        $output = (object) [];
+        $brand_id = $this->input->get('brand_id');
+
+        # count user
+        $api_payload = [
+            'page' => 1,
+            'limit' => 500,
+            'brand_id' => $brand_id
+        ];
+
+        $result = api_request('GET', 'v1/vehicle/model', $api_payload);
+
+        if ($result->status == 'error') {
+
+            $output = (object)[
+                'status' => 'error',
+                'message' => 'Error',
+                'data' => (object)[]
+            ];
+
+            http_response_code(200);
+
+            echo json_encode($output);
+            exit;
+        }
+
+        $output = (object)[
+            'status' => 'success',
+            'message' => 'Success',
+            'data' => $result->data
+        ];
+
+        http_response_code(200);
+
+        echo json_encode($output);
+        exit;
+    }
+
+    public function location_city()
+    {
+        $output = (object) [];
+
+        # count user
+        $api_payload = [
+            'page' => 1,
+            'limit' => 500,
+        ];
+
+        $result = api_request('GET', 'v1/location/city', $api_payload);
+
+        if ($result->status == 'error') {
+
+            $output = (object)[
+                'status' => 'error',
+                'message' => 'Error',
+                'data' => (object)[]
+            ];
+        }
+
+        $output = (object)[
+            'status' => 'success',
+            'message' => 'Success',
+            'data' => $result->data
+        ];
+
+        return $output;
     }
 }

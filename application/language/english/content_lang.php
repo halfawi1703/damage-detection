@@ -17,7 +17,7 @@ $lang['vehicle_unit_information'] = 'Vehicle Unit Information';
 $lang['police_number'] = 'Police Number';
 $lang['vehicle_brand'] = 'Vehicle Brand';
 $lang['machine_number'] = 'Machine Number';
-$lang['vehicle_variant'] = 'Vehicle Variants';
+$lang['vehicle_model'] = 'Vehicle Model';
 $lang['chassis_number'] = 'Chassis Number';
 $lang['vehicle_year'] = 'Vehicle Year';
 
