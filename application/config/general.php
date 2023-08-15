@@ -30,4 +30,4 @@ $config['theme_color'] = '#24205c';
 | API
 |--------------------------------------------------------------------------
 */
-$config['api_host'] = 'http://localhost:8080/damage-detection/api/';
+$config['api_host'] = 'https://damage-detection.lapakrumpin.com/api/';
