@@ -19,7 +19,7 @@ function api_request($method, $path, $payload = [])
     }
 
     $url = api_host() . $path;
-    
+   
     if ($method == 'GET') {
         if ($payload) {
             $query = '?' . http_build_query($payload);
@@ -52,7 +52,7 @@ function api_request($method, $path, $payload = [])
 
     $response = curl_exec($ch);
     $error = curl_error($ch);
-    
+
     $output = json_decode($response);
 
     $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);

@@ -100,7 +100,7 @@
 <div class="app-content">
     <div class="page-header">
         <div class="page-info">
-            <h1 class="page-title"><?php echo @$page_title; ?></h1>
+            <h1 class="page-title"><?php echo @$page_title ?></h1>
         </div>
         <div class="page-action">
             <button class="btn btn--primary" id="add-report"><i class="fa fa-plus" aria-hidden="true"></i> Add Report</button>
@@ -124,7 +124,7 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Name</th>
+                                <th>Polic Number</th>
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Status</th>
@@ -186,8 +186,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="vehicle_brand" class="label"><?php echo $this->lang->line('vehicle_brand'); ?> <span class="required">*</span></label>
-                                <select class="form-control" id="vehicle_brand" name="vehicle_brand">
-                                    <option value="">--- Please Select ---</option>
+                                <select class="form-control" id="vehicle_brand" name="vehicle_brand" style="width: 100%">
+                                    <option value="">--- Select Brand---</option>
                                     <?php foreach ($vehicle_brand->data as $key => $value) : ?>
                                         <option value="<?php echo $value->id; ?>"><?php echo $value->name; ?></option>
                                     <?php endforeach; ?>
@@ -197,7 +197,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="vehicle_model" class="label"><?php echo $this->lang->line('vehicle_model'); ?> <span class="required">*</span></label>
-                                <select class="form-control" id="vehicle_model" name="vehicle_model" disabled>
+                                <select class="form-control" id="vehicle_model" name="vehicle_model" style="width: 100%" disabled>
                                     <option value="">--- Please Select ---</option>
                                 </select>
                             </div>
@@ -736,7 +736,17 @@
 </script>
 <script>
     $('#event_location').select2({
-        placeholder: "--- Select ---",
+        placeholder: "--- Select Location---",
+        allowClear: true
+    });
+
+    $('#vehicle_brand').select2({
+        placeholder: "--- Select Brand---",
+        allowClear: true
+    });
+
+    $('#vehicle_model').select2({
+        placeholder: "--- Select Brand---",
         allowClear: true
     });
 
@@ -945,56 +955,64 @@
             // right_image: {
             //     required: true
             // }
-        },
-        submitHandler: function(form) {
-            $('#addReportForm').on('submit', function(e) {
-                let isvalidate = $(this).valid();
-                let elBtn = $('#addReportForm [type="submit"]');
+        }
+    });
 
-                e.preventDefault();
+    $('#addReportForm').on('submit', function(e) {
+        e.preventDefault();
 
-                if (isvalidate == false) {
-                    return false;
+        console.log(1);
+        
+        let isvalidate = $(this).valid();
+        let elBtn = $('#addReportForm [type="submit"]');
+
+        if (isvalidate == false) {
+            console.log(2);
+            return false;
+        }
+
+        console.log(3);
+        
+
+        $.ajax({
+            type: 'post',
+            url: BASE_URL + 'report/insert',
+            data: $('#addReportForm').serialize(),
+            beforeSend: function() {
+                btnLoader(elBtn);
+            },
+            success: function(response) {
+                response = $.parseJSON(response);
+
+                return false;
+
+                if (response.status == 'error') {
+                    notification('error', response.message);
+                } else if (response.status == 'success') {
+                    notification('info', response.message);
+
+                    $('#addReportModal').modal('hide');
+
+                    table.draw(false);
+
+                    $('#addReportForm').find('select, input').val(null);
+                }
+            },
+            error: function(xhr) {
+                return false;
+                if (xhr.status == 401) {
+                    window.location.replace(BASE_URL + 'login');
                 }
 
-                $.ajax({
-                    type: 'post',
-                    url: BASE_URL + 'report/insert',
-                    data: $('#addReportForm').serialize(),
-                    beforeSend: function() {
-                        btnLoader(elBtn);
-                    },
-                    success: function(response) {
-                        response = $.parseJSON(response);
+                notification('error', xhr.status + ' ' + xhr.statusText, 3000, true);
+            },
+            complete: function() {
+                setTimeout(function() {
+                    btnLoader(elBtn);
+                }, 1000);
+            }
+        });
 
-                        if (response.status == 'error') {
-                            notification('error', response.message);
-                        } else if (response.status == 'success') {
-                            notification('info', response.message);
-
-                            $('#addReportModal').modal('hide');
-
-                            table.draw(false);
-
-                            $('#addReportForm').find('select, input').val(null);
-                        }
-                    },
-                    error: function(xhr) {
-                        if (xhr.status == 401) {
-                            window.location.replace(BASE_URL + 'login');
-                        }
-
-                        notification('error', xhr.status + ' ' + xhr.statusText, 3000, true);
-                    },
-                    complete: function() {
-                        setTimeout(function() {
-                            btnLoader(elBtn);
-                        }, 1000);
-                    }
-                });
-
-            });
-        }
     });
 
     $('#add-report').click(function() {

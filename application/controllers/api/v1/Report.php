@@ -17,6 +17,8 @@ class Report extends PSI_Controller
 
     public function index_get()
     {
+        $this->auth();
+        
         $page = $this->get('page') ?: 1;
         $limit = $this->get('limit') ?: 10;
         $id = $this->get('id');
