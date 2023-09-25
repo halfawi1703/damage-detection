@@ -248,4 +248,16 @@ class Vehicle extends PSI_Controller
 
         $this->response($output->response, $output->code);
     }
+
+	public function edition_get()
+	{
+		$car_db = $this->load->database('car_db', TRUE);
+
+		$car_db->select('*');
+		$car_db->from('car_trim');
+		$query = $car_db->get()->result();
+
+		echo "<pre>";
+		print_r($query);
+	}
 }

@@ -94,3 +94,25 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+
+$db['db_car'] = array(
+	'dsn'	=> '',
+	'hostname' => $_SERVER['DB1_HOSTNAME'],
+	'username' => $_SERVER['DB1_USERNAME'],
+	'password' => $_SERVER['DB1_PASSWORD'],
+	'database' => $_SERVER['DB1_DATABASE'],
+	'dbdriver' => $_SERVER['DB1_DRIVER'],
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
